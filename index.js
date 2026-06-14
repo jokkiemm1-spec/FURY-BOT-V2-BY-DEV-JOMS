@@ -1,10 +1,8 @@
 const { default: makeWASocket, useMultiFileAuthState, Browsers } = require("@whiskeysockets/baileys");
 const pino = require("pino");
 const fs = require('fs');
-const { loadPlugins } = require("./loader");
 const { app, setSock } = require("./web");
 
-// Delete old session so pairing works fresh
 if (fs.existsSync('auth')) {
     fs.rmSync('auth', { recursive: true, force: true });
     console.log('Deleted old session');
@@ -22,20 +20,17 @@ async function startBot() {
     sock.ev.on("creds.update", saveCreds);
     setSock(sock);
 
-    const plugins = loadPlugins();
-
     sock.ev.on("messages.upsert", async ({ messages }) => {
         const msg = messages[0];
         if (!msg.message) return;
 
         const text = msg.message.conversation || msg.message.extendedTextMessage?.text;
-        if (!text ||!text.startsWith(".")) return;
+        if (!text) return;
 
-        const args = text.slice(1).trim().split(" ");
-        const cmd = args.shift().toLowerCase();
-
-        if (plugins.has(cmd)) {
-            plugins.get(cmd)(sock, msg, args);
+        if (text === ".ping") {
+            await sock.sendMessage(msg.key.remoteJid, {
+                text: "🏓 DEV JOM AI BOT is alive!"
+            });
         }
     });
 
