@@ -30,9 +30,9 @@ app.post("/pair", async (req, res) => {
 
     try {
         const code = await sockGlobal.requestPairingCode(number);
-        res.send(`<h1>Your WhatsApp Code: ${code}</h1><p>Go to WhatsApp → Linked Devices → Link with phone number</p>`);
+        res.send(`<h1>Your WhatsApp Code: ${code}</h1><p>WhatsApp → Linked Devices → Link with phone number</p>`);
     } catch (e) {
-        res.send("<h2>Error: Make sure number starts with 234... No + sign</h2>");
+        res.send("<h2>Error: Use 2349036106257. No + sign</h2>");
     }
 });
 
